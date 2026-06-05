@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+    <link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+/>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <body>
+    <!-- Header with logo, search bar, and navigation buttons -->
+<header class="bg-light p-2 shadow-sm">
+  <ul class="horizontal-menu d-flex align-items-center justify-content-between list-unstyled m-0" id="tejar-logo">
+
+    <!-- Logo -->
+    <li>
+      <a href="/">
+        <img id="main-logo" src="/assets/Tejarlogo.svg" alt="logo" height="40">
+      </a>
+    </li>
+
+    <!-- Search -->
+    <li class="flex-grow-1 mx-3">
+      <input class="form-control" type="text" placeholder="Search">
+    </li>
+
+    <!-- Buttons -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+  <div class="container">
+
+    <a class="navbar-brand" href="/">
+      Shop
+    </a>
+
+    <div class="collapse navbar-collapse">
+
+      <ul class="navbar-nav ms-auto">
+
+        <li class="nav-item">
+          <a class="nav-link" href="/">
+            Home
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/cart">
+            Cart
+          </a>
+        </li>
+
+        <% if(user) { %>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">
+              Logout
+            </a>
+          </li>
+
+        <% } else { %>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/login">
+              Login
+            </a>
+          </li>
+
+        <% } %>
+
+      </ul>
+
+    </div>
+
+  </div>
+
+</nav>
+
+      <!-- AUTH BUTTONS -->
+      <% if (!user) { %>
+        <a href="/login" class="btn btn-primary">Log in</a>
+        <a href="/register" class="btn btn-success">Register</a>
+      <% } else { %>
+        <a href="/logout" class="btn btn-danger">Logout</a>
+      <% } %>
+
+    </div>
+
+  </ul>
+</header>
+
+    <!-- Categories and main navigation menu -->
+<section id="options-pane">
+  <nav class="navbar">
+    <button class="hamburger" id="hamburger-menu">☰</button>
+    <ul class="horizontal-menu" id="nav-links">
+      <li><button class="btn">Home</button></li>
+      <li><button>Deals</button></li>
+      <li><button>Featured</button></li>
+      <li><button>New Arrival</button></li>
+      <li><button>Best Seller</button></li>
+      <li><button>Most Viewed</button></li>
+    </ul>
+  </nav>
+</section>
+
+    <!-- Hero banner section -->
+    <section id="banners">
+      <div id="topmost-banner">
+     <!---- <img  id="banner-img" src="/assets/weak_1_pk_size_02.jpg" alt="" /> -->
+      </div>
+      <div class="banner-para-div">
+        <p class="banner-para">100% Geniune Products</p>
+        <p class="banner-para">Discounts Offered Every Day</p>
+        <p class="banner-para">Free Shipping</p>
+      </div>
+    </section>
+
+   <section id="deals" class="container my-4">
+
+  <!-- FILTER BAR -->
+  <form method="GET" action="/" class="row g-2 mb-4">
+
+    <div class="col-md-3">
+      <input
+        type="text"
+        name="search"
+        class="form-control"
+        placeholder="Search products"
+        value="<%= search %>"
+      >
+    </div>
+
+    <div class="col-md-2">
+      <select name="category" class="form-select">
+        <option value="">All Categories</option>
+        <option value="Electronics" <%= category === 'Electronics' ? 'selected' : '' %>>
+          Electronics
+        </option>
+        <option value="Fashion" <%= category === 'Fashion' ? 'selected' : '' %>>
+          Fashion
+        </option>
+        <option value="Home" <%= category === 'Home' ? 'selected' : '' %>>
+          Home
+        </option>
+      </select>
+    </div>
+
+    <div class="col-md-2">
+      <input
+        type="number"
+        name="minPrice"
+        class="form-control"
+        placeholder="Min"
+        value="<%= minPrice %>"
+      >
+    </div>
+
+    <div class="col-md-2">
+      <input
+        type="number"
+        name="maxPrice"
+        class="form-control"
+        placeholder="Max"
+        value="<%= maxPrice %>"
+      >
+    </div>
+
+    <div class="col-md-2">
+      <button class="btn btn-primary w-100">
+        Filter
+      </button>
+    </div>
+
+  </form>
+
+  <!-- PRODUCTS GRID -->
+  <div class="row g-4">
+
+    <% products.forEach(product => { %>
+
+      <div class="col-md-3">
+
+        <div class="card h-100 shadow-sm">
+
+          <img
+            src="<%= product.image %>"
+            class="card-img-top"
+            alt="<%= product.name %>"
+            style="height: 180px; object-fit: cover;"
+          >
+
+          <div class="card-body">
+
+            <h6 class="card-title">
+              <%= product.name %>
+            </h6>
+
+            <p class="mb-1 text-muted">
+              Stock: <%= product.stock %>
+            </p>
+
+            <p class="mb-1 fw-bold">
+              PKR <%= product.price.toLocaleString() %>
+            </p>
+
+            <p class="mb-2">
+              ⭐ <%= product.rating %>
+            </p>
+
+            <button
+  class="btn btn-success w-100 add-to-cart"
+  data-id="<%= product._id %>"
+>
+  Add to Cart
+</button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    <% }) %>
+
+  </div>
+
+  <!-- PAGINATION -->
+  <div class="d-flex justify-content-center mt-4 gap-2">
+
+    <% if(currentPage > 1) { %>
+      <a class="btn btn-outline-primary"
+         href="?page=<%= currentPage - 1 %>&search=<%= search %>&category=<%= category %>&minPrice=<%= minPrice %>&maxPrice=<%= maxPrice %>">
+        Previous
+      </a>
+    <% } %>
+
+    <% for(let i = 1; i <= totalPages; i++) { %>
+      <a class="btn <%= i === currentPage ? 'btn-primary' : 'btn-outline-primary' %>"
+         href="?page=<%= i %>&search=<%= search %>&category=<%= category %>&minPrice=<%= minPrice %>&maxPrice=<%= maxPrice %>">
+        <%= i %>
+      </a>
+    <% } %>
+
+    <% if(currentPage < totalPages) { %>
+      <a class="btn btn-outline-primary"
+         href="?page=<%= currentPage + 1 %>&search=<%= search %>&category=<%= category %>&minPrice=<%= minPrice %>&maxPrice=<%= maxPrice %>">
+        Next
+      </a>
+    <% } %>
+
+  </div>
+
+</section>
+
+
+</section>
+    <!-- Category icon cards section -->
+    <section id="category-icons">
+      <div class="horizontal-products">
+        <div class="card" style="width: 8rem; text-align: center">
+          <img src="/assets/path_to_image.jpg" class="card-img-top" alt="Audio" />
+          <div class="card-body">
+            <h5 class="card-title">Audio</h5>
+          </div>
+        </div>
+
+        <div class="card" style="width: 8rem; text-align: center">
+          <img src="/assets/path_to_image.jpg" class="card-img-top" alt="Games" />
+          <div class="card-body">
+            <h5 class="card-title">Games and Accessories</h5>
+          </div>
+        </div>
+
+        <div class="card" style="width: 8rem; text-align: center">
+          <img src="/assets/path_to_image.jpg" class="card-img-top" alt="Cell Phones" />
+          <div class="card-body">
+            <h5 class="card-title">Cell Phones, Tablets & Accessories</h5>
+          </div>
+        </div>
+
+<div class="card" style="width: 8rem; text-align: center">
+  <img src="/assets/path_to_camera.jpg" class="card-img-top" alt="Camera" />
+  <div class="card-body">
+    <h5 class="card-title">Camera, Camcorder & Photo</h5>
+  </div>
+</div>
+
+<div class="card" style="width: 8rem; text-align: center">
+  <img src="/assets/path_to_drones.jpg" class="card-img-top" alt="Drones" />
+  <div class="card-body">
+    <h5 class="card-title">Drones & Toys</h5>
+  </div>
+</div>
+
+<div class="card" style="width: 8rem; text-align: center">
+  <img src="/assets/path_to_computers.jpg" class="card-img-top" alt="Computers" />
+  <div class="card-body">
+    <h5 class="card-title">Computers & Accessories</h5>
+  </div>
+</div>
+
+<div class="card" style="width: 8rem; text-align: center">
+  <img src="/assets/path_to_health.jpg" class="card-img-top" alt="Health" />
+  <div class="card-body">
+    <h5 class="card-title">Health, Fitness & Beauty</h5>
+  </div>
+</div>
+
+<div class="card" style="width: 8rem; text-align: center">
+  <img src="/assets/path_to_home.jpg" class="card-img-top" alt="Home" />
+  <div class="card-body">
+    <h5 class="card-title">Home & Office</h5>
+  </div>
+</div>
+
+<div class="card" style="width: 8rem; text-align: center">
+  <img src="/assets/path_to_tv.jpg" class="card-img-top" alt="TV" />
+  <div class="card-body">
+    <h5 class="card-title">TV & Video</h5>
+  </div>
+</div>
+      </div>
+
+      
+    </section>
+
+    <!-- Specific product sections with varied layouts -->
+    <section id="specific-product-section">
+      <!-- Two column product section -->
+      <div class="section-product-pane">
+        <div class="section-one card">
+          <img
+            src="/assets/bluetooth_portable_speakers_1.jpg"
+            class="card-img-top"
+            alt="Portable Bluetooth Speaker"
+          />
+          <div class="card-body">
+            <h5 class="card-title">Portable Bluetooth Speaker</h5>
+            <div class="text-button-horizontal-div">
+              <p class="card-text">Upgrade your portable music</p>
+              <button class="btn">Shop Now</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-one card">
+          <img
+            src="/assets/bluetooth_portable_speakers_1.jpg"
+            class="card-img-top"
+            alt="Portable Bluetooth Speaker"
+          />
+          <div class="card-body">
+            <h5 class="card-title">Portable Bluetooth Speaker</h5>
+            <div class="text-button-horizontal-div">
+              <p class="card-text">Upgrade your portable music</p>
+              <button class="btn">Shop Now</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Full width product section -->
+      <div class="section-product-pane">
+        <div class="card" id="gaming-laptop-image">
+          <img
+            class="card-img-top"
+            src="/assets/gaming_laptops_11zon_1.jpg"
+            alt=""
+          />
+          <div class="card-body">
+            <h5 class="card-title">Portable Bluetooth Speaker</h5>
+            <div class="text-button-horizontal-div">
+              <p class="card-text">Upgrade your portable music</p>
+              <button class="btn">Shop Now</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Two column product section -->
+      <div class="section-product-pane">
+        <div class="section-one card">
+          <img
+            src="/assets/bluetooth_portable_speakers_1.jpg"
+            class="card-img-top"
+            alt="Portable Bluetooth Speaker"
+          />
+          <div class="card-body">
+            <h5 class="card-title">Portable Bluetooth Speaker</h5>
+            <div class="text-button-horizontal-div">
+              <p class="card-text">Upgrade your portable music</p>
+              <button class="btn">Shop Now</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-one card">
+          <img
+            src="/assets/bluetooth_portable_speakers_1.jpg"
+            class="card-img-top"
+            alt="Portable Bluetooth Speaker"
+          />
+          <div class="card-body">
+            <h5 class="card-title">Portable Bluetooth Speaker</h5>
+            <div class="text-button-horizontal-div">
+              <p class="card-text">Upgrade your portable music</p>
+              <button class="btn">Shop Now</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+<section id="featured">
+  <h3>Featured Deals</h3>
+  <div class="horizontal-products" id="featured-container">
+    <!-- Cards will be injected here -->
+  </div>
+</section>
+
+<!-- Quick View Modal -->
+<div id="quick-view-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-button">&times;</span>
+    <img id="modal-image" src="" alt="" style="max-width:200px;"/>
+    <h4 id="modal-title"></h4>
+    <p id="modal-description"></p>
+    <p id="modal-price"></p>
+    <p id="modal-rating"></p>
+  </div>
+</div>
+
+    <!-- Featured brands section -->
+    <section id="featured-brands">
+      <h3>Featured Brands</h3>
+      <a href="">View All</a>
+      <div class="horizontal-products">
+        <!-- Brand cards with image and shop button -->
+      <div class="card">
+        <img class="card-image-top" src="/assets/Feature_Brands-01_2_.jpg" alt="">
+        <div class="text-button-horizontal-div">
+            <p>ASUS</p>
+            <button class="btn">Shop Now</button>
+        </div>
+      </div>
+
+            <div class="card">
+        <img class="card-image-top" src="/assets/Feature_Brands-01_2_.jpg" alt="">
+        <div class="text-button-horizontal-div">
+            <p>ASUS</p>
+            <button class="btn">Shop Now</button>
+        </div>
+      </div>
+      
+      <div class="card">
+        <img class="card-image-top" src="/assets/Feature_Brands-01_2_.jpg" alt="">
+        <div class="text-button-horizontal-div">
+            <p>ASUS</p>
+            <button class="btn">Shop Now</button>
+        </div>
+      </div>
+      
+
+      <div class="card">
+        <img class="card-image-top" src="/assets/Feature_Brands-01_3_.jpg" alt="">
+        <div class="text-button-horizontal-div">
+            <p>ASUS</p>
+            <button class="btn">Shop Now</button>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- Information section with company details and benefits -->
+    <section id="info">
+        <div>
+            <h2>Tejar.pk – An Exclusive Storefront for You!</h2>
+            <p>Tejar.pk stands to be the best online shopping website in Pakistan with countless consumer electronics categories. This store came into vision with the aim to provide a seamless, convenient and safe shopping experience all across Pakistan.</p>
+            <br>
+            <p>We have kept the hierarchy of the products quite simple so you can browse all the winning items in one go. You can browse your desired products by category, brand and even by the name!</p>
+            <br>
+            <p>Our e-commerce store is well-designed with a straight-forward layout to make shopping as hassle-free as possible for our esteemed customers. While others are still finding ways to make your experience top-notch, we have adopted a dynamic approach from the start so you can spend less time browsing and more time buying your favorite products.</p>
+            <p>Our online electronics store in Pakistan houses everything you can possibly imagine – from computer accessories, tablets, laptops, desktops, workstations, routers and computer peripherals to in-vogue makeup staples and everything in between. For those always on the clock, Tejar.pk is the best bet to rely on. Either shop in the wee hours of the morning or at night from your bed as this store never shuts down.</p>
+            <br>
+            <h3>Shop from a Diverse Pool of World-famous Brands</h3>
+            <p>As an online shopping store in Pakistan that deals primarily in computer accessories, we are second to none. Are you a student confused about what laptop to get or a professional gamer looking for a specific mouse to improve your gameplay? Our categories segregate all the products purpose wise for your ease and that too, with recommendations to facilitate a shopping experience that is simpler and quicker.</p>
+            <br>
+            <p>If you want the products sorted brand wise, we have that option on our store as well. Shop from renowned brands around the world, such as Apple, Owl Labs, Yubico, Blue, Anker, Logitech, MAC, tarte, Sony, Fujifilm, Belkin, Ledger and a lot more. Just wait till you discover our extensive range of top consumer electronics brands. If not amazed, you'd definitely be lost among all the big names listed right here!</p>
+            <br>
+            <h3>Be the First to Discover Hottest Trends</h3>
+            <p>We ensure that any product we sell stands up to the test of everyday life. Launching into the right vertical, we are one of the best online electronics stores in Pakistan to bring tech essentials closer to you. Apart from that, our experts tirelessly curate the top deals on all the hottest products so you can buy them before anyone else can!</p>
+            <br>
+            <h3>Hassle-free Shopping Experience with Versatile Payment Options</h3>
+            <p>We offer more than just the freedom to shop from the comfort of your home. With flexible payment methods, you can buy your favorite product and have it delivered at your doorstep. We keep our prices and delivery items transparent for your convenience and satisfaction.</p>
+            <br>
+            <p>In addition, our customer success representatives are just one call away to inform you about any order or shipping details beforehand. And their work just does not end here! Our representatives are on the frontline and always at your disposal to assist if you encounter any problem with the bought product. Apart from cordial service from our experts, we have a fair return policy and additional warranty claim service to deliver world-class customer experience.</p>
+            <br>
+            <p>Tejar.pk is one of the few pioneers to set foot in this industry and cater to the needs of those with a love for consumer electronics. We are always striving to improve our operations and constantly updating our store with the latest sought-after products to have your tech needs covered at all times. So, what's the wait for? Join our wide circle of satisfied customers and start discovering the true potential of consumer electronics.</p>
+        </div>
+    </section>
+
+    <!-- Footer with multiple sections -->
+    <footer>
+        <!-- Customer Service links -->
+        <div>
+            <h2>Customer Service</h2>
+            <div>
+                <a href="">Help</a><br>
+                <a href="">Contact</a><br>
+                <a href="">Order Status</a>
+            </div>
+        </div>
+
+        <!-- Company information links -->
+        <div>
+            <h2>Company</h2>
+            <div>
+                <a href="">About</a><br>
+                <a href="">Careers</a><br>
+                <a href="">Privacy</a><br>
+                <a href="">Terms</a>
+            </div>
+        </div>
+
+        <!-- Account links -->
+        <div>
+            <h2>Account</h2>
+            <div>
+                <a href="">Login/Register</a><br>
+                <a href="">Account Dashboard</a><br>
+                <a href="">Address Book</a><br>
+                <a href="">My Orders</a><br>
+                <a href="">My Wishlist</a>
+            </div>
+        </div>
+
+        <!-- Newsletter signup -->
+        <div>
+            <h2>Sign up for News and Offers</h2>
+            <input type="text" name="" id="" placeholder="Enter your email">
+            <p>This site is protected by reCaptcha and <br> the Google <a href="">Privacy Policy</a> and <a href="">Terms of Service</a> apply.</p>
+        </div>
+
+        <!-- Social media follow section -->
+        <div>
+            <h2>Follow Us</h2>
+        </div>
+    </footer>
+
+    <!-- Copyright footer -->
+    <div id="final-footer">
+      <p>2026 Tejar.pk</p>
+    </div>
+
+    <!-- External JavaScript file -->
+    <script src="/js/script.js"></script>
+  </body>
+</html>
+
+
+<script>
+document.querySelectorAll('.add-to-cart')
+  .forEach(button => {
+
+    button.addEventListener('click', async () => {
+
+      const id = button.getAttribute('data-id');
+
+      const res = await fetch(`/cart/add/${id}`, {
+        method: 'GET'
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+
+        // update cart counter if exists
+        const cartCount =
+          document.querySelector('#cart-count');
+
+        if (cartCount) {
+          cartCount.innerText =
+            data.cartCount;
+        }
+
+        // optional UI feedback
+        button.innerText = "Added ✔";
+        button.disabled = true;
+
+        setTimeout(() => {
+          button.innerText = "Add to Cart";
+          button.disabled = false;
+        }, 1000);
+
+      }
+
+    });
+
+  });
+</script>

@@ -1,0 +1,82 @@
+<h2 class="mb-4">Sales Dashboard</h2>
+
+<!-- STATS -->
+<div class="row mb-4">
+
+  <div class="col-md-6">
+    <div class="card p-3">
+      <h5>Total Orders</h5>
+      <h3 id="totalOrders"><%= totalOrders %></h3>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card p-3">
+      <h5>Total Revenue</h5>
+      <h3 id="totalRevenue">
+        PKR <%= totalRevenue.toLocaleString() %>
+      </h3>
+    </div>
+  </div>
+
+</div>
+
+<!-- DAILY SALES TABLE -->
+<h4>Daily Sales</h4>
+
+<table class="table table-bordered">
+
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Orders</th>
+      <th>Revenue</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% salesByDay.forEach(day => { %>
+      <tr>
+        <td><%= day._id %></td>
+        <td><%= day.orders %></td>
+        <td>PKR <%= day.revenue %></td>
+      </tr>
+    <% }) %>
+  </tbody>
+
+</table>
+
+<!-- =========================
+     REAL-TIME POLLING SCRIPT
+========================= -->
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script>
+
+function updateSalesData() {
+
+  $.getJSON('/api/v1/sales-data', function(data) {
+
+    // update stats
+    $('#totalOrders').text(data.totalOrders);
+
+    $('#totalRevenue').text(
+      'PKR ' + data.totalRevenue.toLocaleString()
+    );
+
+  });
+
+}
+
+$(document).ready(function() {
+
+  // initial call
+  updateSalesData();
+
+  // update every 10 seconds
+  setInterval(updateSalesData, 10000);
+
+});
+
+</script>
