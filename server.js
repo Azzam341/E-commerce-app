@@ -30,8 +30,9 @@ const productController = require('./controllers/productController');
 /* =========================
    DATABASE CONNECTION
 ========================= */
+const dbURI = process.env.CONNECTION_STRING || 'mongodb://127.0.0.1:27017/ecommerce';
 
-mongoose.connect(process.env.CONNECTION_STRING)
+mongoose.connect(dbURI)
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log('DB Error:', err));
 
