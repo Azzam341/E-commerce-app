@@ -39,6 +39,9 @@
     .hero-banner{background:linear-gradient(90deg, rgba(109,40,217,0.08), rgba(6,182,212,0.03));border-radius:12px;padding:18px;margin:18px 0;display:flex;align-items:center;justify-content:space-between;gap:12px}
     .hero-copy h1{font-weight:700;margin:0 0 6px 0}
     .hero-copy p{margin:0;color:var(--muted)}
+    .filter-section{margin-bottom:18px}
+    .filter-panel{background:rgba(255,255,255,0.92);border:1px solid rgba(15,23,36,0.08);border-radius:12px;padding:18px;box-shadow:0 10px 30px rgba(15,23,36,0.06)}
+    .filter-panel .form-control,.filter-panel .form-select{min-width:180px;max-width:240px}
 
     main{padding:18px}
     .grid-cards{display:grid;grid-template-columns:repeat(1,1fr);gap:18px}
@@ -72,31 +75,33 @@
 
 <body>
 
-  <header class="site-header container">
-    <nav class="site-nav">
-      <div class="brand">
-        <a href="/"><img id="main-logo" src="/assets/Tejarlogo.svg" alt="logo"></a>
-        <div>
-          <div style="font-weight:700">Tejar</div>
-          <div style="font-size:12px;color:var(--muted)">Quality store</div>
+  <header class="site-header container-fluid">
+    <div class="container-xl">
+      <nav class="site-nav">
+        <div class="brand">
+          <a href="/"><img id="main-logo" src="/assets/Omnimart.png" alt="logo"></a>
+          <div>
+            <div style="font-weight:700">OMNI-MART</div>
+            <div style="font-size:12px;color:var(--muted)"> You one shop stop for everything </div>
+          </div>
         </div>
-      </div>
 
-      <div style="flex:1;display:flex;justify-content:center">
-        <form method="GET" action="/" style="width:100%;max-width:700px;">
-          <input class="form-control search-input" type="text" name="search" placeholder="Search products, categories or brands" value="<%= search %>">
-        </form>
-      </div>
+        <div style="flex:1;display:flex;justify-content:center">
+          <form method="GET" action="/" style="width:100%;max-width:700px;">
+            <input class="form-control search-input" type="text" name="search" placeholder="Search products, categories or brands" value="<%= search %>">
+          </form>
+        </div>
 
-      <div style="display:flex;align-items:center;gap:10px">
-        <a href="/cart" class="btn btn-ghost">Cart <span id="cart-count" class="badge bg-light text-dark ms-2"><%= typeof cartCount !== 'undefined' ? cartCount : 0 %></span></a>
-        <% if(user) { %>
-          <a href="/profile" class="btn btn-ghost">Profile</a>
-        <% } else { %>
-          <a href="/login" class="btn btn-primary">Login</a>
-        <% } %>
-      </div>
-    </nav>
+        <div style="display:flex;align-items:center;gap:10px">
+          <a href="/cart" class="btn btn-ghost">Cart <span id="cart-count" class="badge bg-light text-dark ms-2"><%= typeof cartCount !== 'undefined' ? cartCount : 0 %></span></a>
+          <% if(user) { %>
+            <a href="/profile" class="btn btn-ghost">Profile</a>
+          <% } else { %>
+            <a href="/login" class="btn btn-primary">Login</a>
+          <% } %>
+        </div>
+      </nav>
+    </div>
   </header>
 
   <main class="container">
@@ -105,12 +110,27 @@
         <h1>Discover quality products</h1>
         <p>Fast delivery • Secure payments • Trusted sellers</p>
       </div>
-      <div>
-        <a href="/admin" class="btn btn-ghost">Seller / Admin</a>
-      </div>
+
     </section>
 
-    <!-- Product Grid -->
+    <section class="filter-section container">
+      <button id="filterToggleBtn" type="button" class="btn btn-ghost">Show filters</button>
+      <form id="filterPanel" method="GET" action="/" class="filter-panel mt-3 d-none">
+        <input type="hidden" name="search" value="<%= search %>">
+        <div class="d-flex flex-wrap gap-2 align-items-end">
+          <select class="form-select" name="category">
+            <option value="" <%= !category ? 'selected' : '' %>>All Categories</option>
+            <option value="Electronics" <%= category === 'Electronics' ? 'selected' : '' %>>Electronics</option>
+            <option value="Fashion" <%= category === 'Fashion' ? 'selected' : '' %>>Fashion</option>
+            <option value="Home" <%= category === 'Home' ? 'selected' : '' %>>Home</option>
+          </select>
+          <input class="form-control" type="number" name="minPrice" placeholder="Min price" min="0" value="<%= minPrice %>">
+          <input class="form-control" type="number" name="maxPrice" placeholder="Max price" min="0" value="<%= maxPrice %>">
+          <button type="submit" class="btn btn-primary">Apply filters</button>
+        </div>
+      </form>
+    </section>
+
     <section aria-label="Products">
       <div class="grid-cards" id="product-cards-container">
         <% products.forEach(product => { %>
@@ -182,7 +202,6 @@
 
   </main>
 
-  <!-- Keep original modal, toast and scripts intact (EJS logic preserved) -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <div class="modal fade" id="quickViewModal" tabindex="-1" aria-labelledby="quickViewModalLabel" aria-hidden="true">
@@ -269,6 +288,15 @@
         const productId = this.getAttribute('data-id');
         runAddToCartRoute(this, productId);
         quickViewModal.hide();
+      });
+
+      const filterToggleBtn = document.getElementById('filterToggleBtn');
+      const filterPanel = document.getElementById('filterPanel');
+      filterToggleBtn?.addEventListener('click', () => {
+        filterPanel?.classList.toggle('d-none');
+        if (filterPanel && filterToggleBtn) {
+          filterToggleBtn.innerText = filterPanel.classList.contains('d-none') ? 'Show filters' : 'Hide filters';
+        }
       });
 
       viewModalElement?.addEventListener('hidden.bs.modal', () => { document.querySelectorAll('.modal-backdrop').forEach(el => el.remove()); document.body.style.overflow = 'auto'; document.body.style.paddingRight = '0px'; });
