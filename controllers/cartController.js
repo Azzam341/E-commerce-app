@@ -13,7 +13,12 @@ const viewCart = (req, res) => {
     0
   );
 
-  res.render('cart', { cart, total });
+  const successMessage = req.session.successMessage || null;
+  const errorMessage = req.session.errorMessage || null;
+  delete req.session.successMessage;
+  delete req.session.errorMessage;
+
+  res.render('cart', { cart, total, successMessage, errorMessage });
 };
 
 /* =========================
@@ -40,6 +45,19 @@ const addToCart = async (req, res) => {
       price: product.price,
       image: product.image,
       quantity: 1
+    });
+  }
+
+  const cartCount = req.session.cart.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  );
+
+  if (req.headers.accept && req.headers.accept.includes('application/json')) {
+    return res.json({
+      success: true,
+      cartCount,
+      message: 'Added to cart'
     });
   }
 
@@ -114,12 +132,46 @@ const checkout = async (req, res) => {
       0
     );
 
+    // If guest (no logged in user) validate address fields
+    let shippingAddress = null;
+    if (!req.session.user) {
+      const { fullName, street, city, state, zip, country, phone, email } = req.body;
+
+      if (!fullName || !street || !city || !zip || !country) {
+        req.session.errorMessage = 'Please provide full shipping address to checkout.';
+        return res.redirect('/cart');
+      }
+
+      shippingAddress = { fullName, street, city, state, zip, country, phone, email };
+    }
+    // Validate that each cart item references an existing product
+    const productIds = [...new Set(cart.map(i => i.productId))];
+    const existingProducts = await Product.find({ _id: { $in: productIds } }).select('_id');
+    const existingIds = existingProducts.map(p => p._id.toString());
+
+    const missing = productIds.filter(id => !existingIds.includes(id));
+    if (missing.length > 0) {
+      console.warn('Checkout aborted: cart contains invalid productIds', missing);
+      req.session.errorMessage = 'One or more items in your cart are no longer available. Please review your cart.';
+      return res.redirect('/cart');
+    }
+
     // SAVE ORDER TO DATABASE
     await Order.create({
       user: req.session.user?.id || null,
       items: cart,
-      totalPrice: total
+      totalPrice: total,
+      shippingAddress,
+      isGuest: !req.session.user
     });
+
+    // UPDATE PRODUCT ORDER COUNTS only for existing products
+    await Promise.all(cart.map(item => {
+      if (!existingIds.includes(item.productId)) return null;
+      return Product.findByIdAndUpdate(item.productId, {
+        $inc: { orderCount: item.quantity || 1 }
+      });
+    }));
 
     // CLEAR CART
     req.session.cart = [];

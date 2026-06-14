@@ -32,6 +32,14 @@
 
   <% } else { %>
 
+    <% if (typeof successMessage !== 'undefined' && successMessage) { %>
+      <div class="alert alert-success"> <%= successMessage %> </div>
+    <% } %>
+
+    <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+      <div class="alert alert-danger"> <%= errorMessage %> </div>
+    <% } %>
+
     <table class="table table-bordered align-middle">
 
       <thead>
@@ -119,6 +127,51 @@
       </h4>
 
 <form method="POST" action="/cart/checkout">
+
+  <% if(!user) { %>
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">Shipping Address (Guest Checkout)</h5>
+
+        <div class="row g-2">
+          <div class="col-md-6">
+            <label class="form-label">Full name</label>
+            <input name="fullName" class="form-control" placeholder="John Doe">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Email (optional)</label>
+            <input name="email" class="form-control" placeholder="you@example.com">
+          </div>
+          <div class="col-12">
+            <label class="form-label">Street address</label>
+            <input name="street" class="form-control" placeholder="123 Main St">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">City</label>
+            <input name="city" class="form-control" placeholder="Karachi">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">State</label>
+            <input name="state" class="form-control" placeholder="Sindh">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">ZIP / Postal Code</label>
+            <input name="zip" class="form-control" placeholder="75500">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Country</label>
+            <input name="country" class="form-control" placeholder="Pakistan">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Phone</label>
+            <input name="phone" class="form-control" placeholder="0312-1234567">
+          </div>
+        </div>
+
+      </div>
+    </div>
+  <% } %>
+
   <button class="btn btn-primary">
     Checkout
   </button>

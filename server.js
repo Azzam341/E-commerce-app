@@ -17,6 +17,7 @@ const app = express();
 ========================= */
 const adminRoutes = require('./routes/admin_routes');
 const authRoutes = require('./routes/auth_routes');
+const profileRoutes = require('./routes/profileRoutes');
 const apiRoutes = require('./routes/api_v1');
 const cartRoutes = require('./routes/cartRoutes');
 const adminAnalyticsRoutes = require('./routes/adminAnalyticsRoutes');
@@ -29,7 +30,9 @@ const productController = require('./controllers/productController');
 /* =========================
    DATABASE CONNECTION
 ========================= */
-mongoose.connect('mongodb://127.0.0.1:27017/ecommerce')
+const dbURI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/ecommerce';
+
+mongoose.connect(dbURI)
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log('DB Error:', err));
 
@@ -56,7 +59,7 @@ app.use(session({
   saveUninitialized: false,
 
   store: MongoStore.create({
-    mongoUrl: 'mongodb://127.0.0.1:27017/ecommerce'
+    mongoUrl: dbURI
   }),
 
   cookie: {
@@ -69,6 +72,8 @@ app.use(session({
 ========================= */
 app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
+  const cart = req.session.cart || [];
+  res.locals.cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   next();
 });
 
@@ -76,9 +81,12 @@ app.use((req, res, next) => {
    ROUTE MOUNTING (ORDER MATTERS)
 ========================= */
 app.use('/', authRoutes);
+app.use('/', profileRoutes);
 app.use('/', adminRoutes);
 app.use('/', cartRoutes);
 app.use('/', adminAnalyticsRoutes);
+
+console.log('Profile route definitions:', profileRoutes.stack.map(r => r.route && r.route.path));
 
 /* API (separate system) */
 app.use('/api/v1', apiRoutes);

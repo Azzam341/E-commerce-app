@@ -8,7 +8,7 @@ const { isAdmin } =
   require('../middleware/auth');
 
 router.get(
-  '/admin/dashboard',
+  '/admin/analytics',
   isAdmin,
   adminAnalytics.getDashboardStats
 );

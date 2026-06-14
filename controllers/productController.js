@@ -1,4 +1,5 @@
 const Product = require('../models/Products');
+const Order = require('../models/Order');
 
 /* =========================
    GET PRODUCTS
@@ -145,6 +146,33 @@ exports.getHomeProducts = async (req, res) => {
     const totalPages =
       Math.ceil(totalProducts / limit);
 
+    const cartCount = (
+      req.session.cart || []
+    ).reduce((sum, item) => sum + item.quantity, 0);
+
+    // Top selling products for the home page
+    const topProducts = await Order.aggregate([
+      { $unwind: '$items' },
+      { $group: { _id: '$items.productId', totalSold: { $sum: '$items.quantity' }, name: { $first: '$items.name' } } },
+      { $sort: { totalSold: -1 } },
+      { $limit: 6 },
+      { $lookup: {
+          from: 'products',
+          let: { pid: '$_id' },
+          pipeline: [
+            { $match: { $expr: { $eq: [ { $toString: '$_id' }, '$$pid' ] } } },
+            { $project: { name: 1, image: 1, price: 1 } }
+          ],
+          as: 'productInfo'
+      } },
+      { $addFields: {
+          displayName: { $ifNull: [ { $arrayElemAt: [ '$productInfo.name', 0 ] }, '$name' ] },
+          image: { $arrayElemAt: [ '$productInfo.image', 0 ] },
+          price: { $arrayElemAt: [ '$productInfo.price', 0 ] }
+      } },
+      { $project: { productInfo: 0 } }
+    ]).catch(err => { console.warn('Top products aggregation failed', err); return []; });
+
     res.render('home', {
       products,
       currentPage: page,
@@ -152,7 +180,9 @@ exports.getHomeProducts = async (req, res) => {
       search,
       category,
       minPrice,
-      maxPrice
+      maxPrice,
+      cartCount,
+      topProducts
     });
 
   } catch (error) {

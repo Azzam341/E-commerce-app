@@ -38,19 +38,56 @@ exports.getDashboardStats = async (req, res) => {
         },
 
         { $sort: { totalSold: -1 } },
-        { $limit: 5 }
+        { $limit: 5 },
+
+        // lookup product details
+        {
+          $lookup: {
+            from: "products",
+            let: { pid: "$_id" },
+            pipeline: [
+              { $match: { $expr: { $eq: [ { $toString: "$_id" }, "$$pid" ] } } },
+              { $project: { name: 1, image: 1 } }
+            ],
+            as: "productInfo"
+          }
+        },
+
+        {
+          $addFields: {
+            product: { $arrayElemAt: ["$productInfo", 0] },
+            displayName: { $ifNull: [ { $arrayElemAt: ["$productInfo.name", 0] }, "$name" ] },
+            image: { $arrayElemAt: ["$productInfo.image", 0] }
+          }
+        },
+
+        { $project: { productInfo: 0, product: 0 } }
       ]);
 
-    const recentOrders =
+    const q = (req.query.q || '').trim();
+
+    let recentOrders =
       await Order.find()
         .sort({ createdAt: -1 })
-        .limit(5);
+        .populate('user', 'name email');
+
+    if (q) {
+      const qLower = q.toLowerCase();
+      recentOrders = recentOrders.filter(order => {
+        const idMatch = order._id.toString().toLowerCase() === qLower;
+        const userEmail = (order.user?.email || '').toLowerCase();
+        const guestEmail = (order.shippingAddress?.email || '').toLowerCase();
+        const emailMatch = userEmail === qLower || guestEmail === qLower;
+        return idMatch || emailMatch;
+      });
+    }
 
     res.render('admin/analyticsDashboard', {
       totalOrders,
       totalRevenue,
       topProducts,
-      recentOrders
+      recentOrders,
+      q
     });
 
   } catch (err) {

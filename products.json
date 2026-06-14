@@ -1,0 +1,145 @@
+[
+  {
+    "_id": "65a1b2c3d4e5f67890123401",
+    "name": "PlayStation 5 Slim Digital Edition",
+    "slug": "playstation-5-slim-digital-edition",
+    "category": "Video Games",
+    "description": "Experience lightning-fast loading with an ultra-high speed SSD, deeper immersion with support for haptic feedback, adaptive triggers, and 3D Audio.",
+    "price": 145000,
+    "image": "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=500&auto=format&fit=crop&q=60",
+    "stock": 14,
+    "rating": 4.9
+  },
+  {
+    "_id": "65a1b2c3d4e5f67890123402",
+    "name": "Xbox Series X 1TB Console",
+    "slug": "xbox-series-x-1tb-console",
+    "category": "Video Games",
+    "description": "The fastest, most powerful Xbox ever. Play thousands of titles from four generations of consoles—all games look and play best on Xbox Series X.",
+    "price": 155000,
+    "image": "https://images.unsplash.com/photo-1621259182978-f09e512268f4?w=500&auto=format&fit=crop&q=60",
+    "stock": 8,
+    "rating": 4.7
+  },
+  {
+    "_id": "65a1b2c3d4e5f67890123403",
+    "name": "Sony WH-1000XM5 Noise Canceling Headphones",
+    "slug": "sony-wh-1000xm5-noise-canceling-headphones",
+    "category": "Headphones",
+    "description": "Industry-leading noise cancellation optimized automatically based on your wearing conditions and environment. Magnificent sound quality engineered to perfection.",
+    "price": 98000,
+    "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=60",
+    "stock": 25,
+    "rating": 4.8
+  },
+  {
+    "_id": "65a1b2c3d4e5f67890123404",
+    "name": "Apple AirPods Pro (2nd Generation)",
+    "slug": "apple-airpods-pro-2nd-generation",
+    "category": "Headphones",
+    "description": "Features up to two times more Active Noise Cancellation, plus Adaptive Audio and Personalized Spatial Audio with dynamic head tracking for immersive sound.",
+    "price": 68000,
+    "image": "https://images.unsplash.com/photo-1588444837495-c6cfeb53f32d?w=500&auto=format&fit=crop&q=60",
+    "stock": 40,
+    "rating": 4.6
+  },
+  {
+    "_id": "65a1b2c3d4e5f67890123405",
+    "name": "iPhone 15 Pro Max 256GB",
+    "slug": "iphone-15-pro-max-256gb",
+    "category": "Smartphones",
+    "description": "Forged in titanium and featuring the groundbreaking A17 Pro chip, a customizable Action button, and the most powerful iPhone camera system ever.",
+    "price": 385000,
+    "image": "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=500&auto=format&fit=crop&q=60",
+    "stock": 19,
+    "rating": 4.9
+  },
+  {
+    "_id": "65a1b2c3d4e5f67890123406",
+    "name": "Samsung Galaxy S24 Ultra",
+    "slug": "samsung-galaxy-s24-ultra",
+    "category": "Smartphones",
+    "description": "Welcome to the era of mobile AI. With Galaxy S24 Ultra in your hands, you can unleash whole new levels of creativity, productivity and possibility.",
+    "price": 360000,
+    "image": "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=500&auto=format&fit=crop&q=60",
+    "stock": 22,
+    "rating": 4.7
+  },
+  {
+    "_id": "65a1b2c3d4e5f67890123407",
+    "name": "MacBook Air 13-inch M3",
+    "slug": "macbook-air-13-inch-m3",
+    "category": "Laptops",
+    "description": "Strikingly thin design. Blazing fast speeds with the Apple M3 chip. Built for Apple Intelligence to transform how you work, create, and play.",
+    "price": 340000,
+    "image": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&auto=format&fit=crop&q=60",
+    "stock": 11,
+    "rating": 4.8
+  },
+  {
+    "_id": "65a1b2c3d4e5f67890123408",
+    "name": "ASUS ROG Zephyrus G14 Gaming Laptop",
+    "slug": "asus-rog-zephyrus-g14-gaming-laptop",
+    "category": "Laptops",
+    "description": "Powerful AMD Ryzen processor paired with high-performance NVIDIA GeForce RTX graphics inside a highly compact, lightweight 14-inch metal chassis.",
+    "price": 420000,
+    "image": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=500&auto=format&fit=crop&q=60",
+    "stock": 5,
+    "rating": 4.5
+  },
+  {
+    "_id": "65a1b2c3d4e5f67890123409",
+    "name": "LG C3 65-inch 4K OLED Smart TV",
+    "slug": "lg-c3-65-inch-4k-oled-smart-tv",
+    "category": "Television",
+    "description": "The advanced LG OLED evo C-Series is powered by the α9 AI Processor Gen6 for exceptional picture quality, infinite contrast, and spectacular brightness.",
+    "price": 495000,
+    "image": "https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=500&auto=format&fit=crop&q=60",
+    "stock": 6,
+    "rating": 4.9
+  },
+  {
+    "_id": "65a1b2c3d4e5f67890123410",
+    "name": "Fujifilm X-T5 Mirrorless Camera",
+    "slug": "fujifilm-x-t5-mirrorless-camera",
+    "category": "Cameras",
+    "description": "A high-resolution, photography-focused mirrorless camera featuring a classic retro dial layout and a magnificent 40.2-megapixel X-Trans CMOS 5 HR sensor.",
+    "price": 520000,
+    "image": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500&auto=format&fit=crop&q=60",
+    "stock": 4,
+    "rating": 4.8
+  },
+  {
+    "_id": "65a1b2c3d4e5f67890123411",
+    "name": "Philips Hue Smart Lighting Starter Kit",
+    "slug": "philips-hue-smart-lighting-starter-kit",
+    "category": "Smart Home",
+    "description": "Automate your home lighting setup easily. Includes three smart color LED bulbs and the Hue Bridge hub for seamless integration with Alexa, Google Home, and Apple Home.",
+    "price": 32000,
+    "image": "https://images.unsplash.com/photo-1558002038-1055907df827?w=500&auto=format&fit=crop&q=60",
+    "stock": 15,
+    "rating": 4.4
+  },
+  {
+    "_id": "65a1b2c3d4e5f67890123412",
+    "name": "Apple Watch Series 9 GPS",
+    "slug": "apple-watch-series-9-gps",
+    "category": "Wearables",
+    "description": "Your essential companion for a healthy lifestyle is now even more capable. Features the S9 SiP chip, a magic new way to use your watch without touching the screen, and a brighter display.",
+    "price": 125000,
+    "image": "https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=500&auto=format&fit=crop&q=60",
+    "stock": 30,
+    "rating": 4.7
+  },
+  {
+    "_id": "65a1b2c3d4e5f67890123413",
+    "name": "Logitech MX Master 3S Wireless Mouse",
+    "slug": "logitech-mx-master-3s-wireless-mouse",
+    "category": "Accessories",
+    "description": "An iconic ergonomic performance mouse remastered. Feel every moment of your workflow with even more precision, tactile feedback, and 8K DPI tracking on any surface.",
+    "price": 28000,
+    "image": "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=500&auto=format&fit=crop&q=60",
+    "stock": 50,
+    "rating": 4.9
+  }
+]

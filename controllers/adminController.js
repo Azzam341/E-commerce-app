@@ -11,8 +11,12 @@ exports.getDashboard = async (req, res) => {
       await Product.find()
         .sort({ createdAt: -1 });
 
+    const successMessage = req.session.successMessage || null;
+    delete req.session.successMessage;
+
     res.render('admin/dashboard', {
-      products
+      products,
+      successMessage
     });
 
   } catch (err) {
@@ -59,6 +63,7 @@ exports.createProduct = async (req, res) => {
         : '/uploads/default.png'
     });
 
+    req.session.successMessage = 'Product added successfully!';
     res.redirect('/admin');
 
   } catch (err) {
@@ -184,37 +189,76 @@ exports.getAnalytics = async (req, res) => {
     const totalRevenue =
       revenueResult[0]?.totalRevenue || 0;
 
-    /* TOP PRODUCTS */
+    /* TOP PRODUCTS (lookup into Products to get canonical name/image) */
     const topProducts =
       await Order.aggregate([
         { $unwind: "$items" },
 
         {
           $group: {
-            _id: "$items.product",
+            _id: "$items.productId",
             name: { $first: "$items.name" },
-            totalSold: {
-              $sum: "$items.quantity"
-            }
+            totalSold: { $sum: "$items.quantity" }
           }
         },
 
         { $sort: { totalSold: -1 } },
-        { $limit: 5 }
+        { $limit: 5 },
+
+        // Lookup product documents by comparing stringified _id
+        {
+          $lookup: {
+            from: "products",
+            let: { pid: "$_id" },
+            pipeline: [
+              { $match: { $expr: { $eq: [ { $toString: "$_id" }, "$$pid" ] } } },
+              { $project: { name: 1, image: 1 } }
+            ],
+            as: "productInfo"
+          }
+        },
+
+        {
+          $addFields: {
+            product: { $arrayElemAt: ["$productInfo", 0] },
+            displayName: { $ifNull: [ { $arrayElemAt: ["$productInfo.name", 0] }, "$name" ] },
+            image: { $arrayElemAt: ["$productInfo.image", 0] }
+          }
+        },
+
+        { $project: { productInfo: 0, product: 0 } }
       ]);
 
     /* RECENT ORDERS */
-    const recentOrders =
-      await Order.find()
-        .sort({ createdAt: -1 })
-        .limit(5)
-        .populate('user', 'name email');
+    const q = (req.query.q || '').trim();
+
+    // fetch recent orders and populate user info (show all orders)
+    let recentOrders = await Order.find()
+      .sort({ createdAt: -1 })
+      .populate('user', 'name email');
+
+    // If search query provided, filter by exact order id or exact email (case-insensitive)
+    if (q) {
+      const qLower = q.toLowerCase();
+
+      recentOrders = recentOrders.filter(order => {
+        const idMatch = order._id.toString().toLowerCase() === qLower;
+
+        const userEmail = (order.user?.email || '').toLowerCase();
+        const guestEmail = (order.shippingAddress?.email || '').toLowerCase();
+
+        const emailMatch = userEmail === qLower || guestEmail === qLower;
+
+        return idMatch || emailMatch;
+      });
+    }
 
     res.render('admin/analyticsDashboard', {
       totalOrders,
       totalRevenue,
       topProducts,
-      recentOrders
+      recentOrders,
+      q
     });
 
   } catch (err) {
@@ -223,5 +267,28 @@ exports.getAnalytics = async (req, res) => {
 
     res.status(500).send('Server Error');
 
+  }
+};
+
+/* =========================
+   CHANGE ORDER STATUS
+========================= */
+exports.changeOrderStatus = async (req, res) => {
+  try {
+    const orderId = req.params.id;
+    const { status } = req.body;
+
+    // Validate allowed statuses
+    const allowed = ['Placed','Processing','Shipped','Delivered','Cancelled'];
+    if (!allowed.includes(status)) {
+      return res.status(400).send('Invalid status');
+    }
+
+    await Order.findByIdAndUpdate(orderId, { status });
+
+    res.redirect('/admin/analytics');
+  } catch (err) {
+    console.log('STATUS UPDATE ERROR:', err);
+    res.status(500).send('Server Error');
   }
 };

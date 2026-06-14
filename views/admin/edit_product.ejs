@@ -1,49 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Edit Product</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body class="bg-light">
 
-<div class="container mt-5">
+<div class="container mt-5" style="max-width: 600px;">
 
-  <h2>Edit Product</h2>
+  <h2 class="mb-4">Edit Product</h2>
 
   <form action="/admin/edit/<%= product._id %>" method="POST" enctype="multipart/form-data">
 
-    <input name="name" value="<%= product.name %>" class="form-control mb-2">
+    <div class="mb-3">
+      <label for="productName" class="form-label fw-semibold">Product Name</label>
+      <input type="text" id="productName" name="name" value="<%= product.name %>" class="form-control" placeholder="Enter product name" required>
+    </div>
 
-    <textarea name="description" class="form-control mb-2"><%= product.description %></textarea>
+    <div class="mb-3">
+      <label for="productDescription" class="form-label fw-semibold">Description</label>
+      <textarea id="productDescription" name="description" class="form-control" rows="4" placeholder="Enter product description"><%= product.description %></textarea>
+    </div>
 
-    <input name="price" value="<%= product.price %>" type="number" class="form-control mb-2">
+    <div class="mb-3">
+      <label for="productPrice" class="form-label fw-semibold">Price (PKR)</label>
+      <input type="number" id="productPrice" name="price" value="<%= product.price %>" class="form-control" placeholder="0.00" step="any" required>
+    </div>
 
-    <!-- CATEGORY DROPDOWN -->
-    <select name="category" class="form-control mb-2" required>
-      <option disabled>Select Category</option>
+    <div class="mb-3">
+      <label for="productCategory" class="form-label fw-semibold">Category</label>
+      <select id="productCategory" name="category" class="form-select" required>
+        <option value="" disabled>Select Category</option>
+        <option value="Electronics" <%= product.category === 'Electronics' ? 'selected' : '' %>>Electronics</option>
+        <option value="Fashion" <%= product.category === 'Fashion' ? 'selected' : '' %>>Fashion</option>
+        <option value="Home" <%= product.category === 'Home' ? 'selected' : '' %>>Home</option>
+      </select>
+    </div>
 
-      <option value="Electronics" <%= product.category === 'Electronics' ? 'selected' : '' %>>
-        Electronics
-      </option>
+    <div class="mb-3">
+      <label for="productStock" class="form-label fw-semibold">Stock Quantity</label>
+      <input type="number" id="productStock" name="stock" value="<%= product.stock %>" class="form-control" placeholder="0" required>
+    </div>
 
-      <option value="Fashion" <%= product.category === 'Fashion' ? 'selected' : '' %>>
-        Fashion
-      </option>
+    <div class="mb-4">
+      <label class="form-label d-block fw-semibold">Product Image</label>
+      <div class="d-flex align-items-center gap-3 p-2 bg-white border rounded mb-2">
+        <div class="text-center">
+          <small class="text-muted d-block mb-1">Current Image</small>
+          <img src="<%= product.image %>" alt="Current product thumbnail" width="80" height="80" class="img-thumbnail object-fit-cover">
+        </div>
+        <div class="flex-grow-1">
+          <label for="productImageUpload" class="small text-muted mb-1 d-block">Upload new image to replace current one</label>
+          <input type="file" id="productImageUpload" name="image" class="form-control">
+        </div>
+      </div>
+    </div>
 
-      <option value="Home" <%= product.category === 'Home' ? 'selected' : '' %>>
-        Home
-      </option>
-    </select>
-
-    <input name="stock" value="<%= product.stock %>" type="number" class="form-control mb-2">
-
-    <p>Current Image:</p>
-    <img src="<%= product.image %>" width="80" class="mb-3">
-
-    <input type="file" name="image" class="form-control mb-3">
-
-    <button class="btn btn-primary">Update</button>
+    <div class="d-flex gap-2 justify-content-end">
+      <a href="/admin/products" class="btn btn-outline-secondary">Cancel</a>
+      <button type="submit" class="btn btn-primary px-4">Update Product</button>
+    </div>
 
   </form>
 

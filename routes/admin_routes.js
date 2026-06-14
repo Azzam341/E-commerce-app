@@ -19,11 +19,7 @@ router.get(
 /* =========================
    ANALYTICS DASHBOARD
 ========================= */
-router.get(
-  '/admin/analytics',
-  isAdmin,
-  adminController.getAnalytics
-);
+// analytics moved to routes/adminAnalyticsRoutes.js to avoid duplicate handlers
 
 /* =========================
    ADD PRODUCT PAGE
@@ -70,6 +66,15 @@ router.get(
   '/admin/delete/:id',
   isAdmin,
   adminController.deleteProduct
+);
+
+/* =========================
+   UPDATE ORDER STATUS
+========================= */
+router.post(
+  '/admin/order/:id/status',
+  isAdmin,
+  adminController.changeOrderStatus
 );
 
 module.exports = router;
