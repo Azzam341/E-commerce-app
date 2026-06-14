@@ -30,7 +30,7 @@ const productController = require('./controllers/productController');
 /* =========================
    DATABASE CONNECTION
 ========================= */
-const dbURI = 'mongodb://127.0.0.1:27017/ecommerce';
+const dbURI = process.env.CONNECTION_STRING || 'mongodb://127.0.0.1:27017/ecommerce';
 const PORT = process.env.PORT || 3000;
 const mongooseOptions = {
   serverSelectionTimeoutMS: 30000
