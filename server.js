@@ -31,10 +31,22 @@ const productController = require('./controllers/productController');
    DATABASE CONNECTION
 ========================= */
 const dbURI = process.env.CONNECTION_STRING || 'mongodb://127.0.0.1:27017/ecommerce';
+const PORT = process.env.PORT || 3000;
+const mongooseOptions = {
+  serverSelectionTimeoutMS: 30000
+};
 
-mongoose.connect(dbURI)
-  .then(() => console.log('MongoDB Connected'))
-  .catch(err => console.log('DB Error:', err));
+mongoose.connect(dbURI, mongooseOptions)
+  .then(() => {
+    console.log('MongoDB Connected');
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('DB Error:', err);
+    process.exit(1);
+  });
 
 /* =========================
    VIEW ENGINE
@@ -106,8 +118,3 @@ app.use((req, res) => {
 /* =========================
    START SERVER
 ========================= */
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});

@@ -1,0 +1,14 @@
+[{
+  "_id": "5-lfbG6yXDkzd_mSrTJb5Va5aKrMXPYa",
+  "expires": {
+    "$date": "2026-06-27T23:32:33.688Z"
+  },
+  "session": "{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"}}"
+},
+{
+  "_id": "ich3h5Z2gKSoXAJd2A44QfEA1FysUVcJ",
+  "expires": {
+    "$date": "2026-06-15T00:57:48.742Z"
+  },
+  "session": "{\"cookie\":{\"originalMaxAge\":86400000,\"expires\":\"2026-06-15T00:57:48.732Z\",\"httpOnly\":true,\"path\":\"/\"},\"cart\":[{\"productId\":\"6a2de04dbddd5735f671e9e8\",\"name\":\"Mechanical Gaming Keyboard\",\"price\":12500,\"image\":\"https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?w=500&q=80\",\"quantity\":1}],\"user\":{\"id\":\"6a0891cba5cde0cecf75f928\",\"name\":\"Store Manager\",\"email\":\"admin2@test.com\",\"role\":\"admin\"}}"
+}]

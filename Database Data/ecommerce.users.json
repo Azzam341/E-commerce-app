@@ -1,0 +1,120 @@
+[{
+  "_id": {
+    "$oid": "6a0891cba5cde0cecf75f927"
+  },
+  "name": "Super Admin",
+  "email": "admin1@test.com",
+  "password": "$2b$10$KQrNGM4A5lfpSDH7eYVpE.32iwRPBZiE1WL7HFNGTmIvWauTl0cTu",
+  "role": "admin",
+  "createdAt": {
+    "$date": "2026-05-16T15:48:27.012Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-16T15:48:27.012Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a0891cba5cde0cecf75f928"
+  },
+  "name": "Store Manager",
+  "email": "admin2@test.com",
+  "password": "$2b$10$guzvh/ZesuDOK5e4MPR5Ke0h28TjuquIO/dqt6Es.76Gq2dKNgy6.",
+  "role": "admin",
+  "createdAt": {
+    "$date": "2026-05-16T15:48:27.077Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-16T15:48:27.077Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a0891cba5cde0cecf75f929"
+  },
+  "name": "Ali Khan",
+  "email": "ali@test.com",
+  "password": "$2b$10$KZPnYkRT8YPTYpuMT/Pi.e/BPKPbrAPsuOCd/ZYk7Hxo.9omhkhKq",
+  "role": "customer",
+  "createdAt": {
+    "$date": "2026-05-16T15:48:27.134Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-16T15:48:27.134Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a0891cba5cde0cecf75f92a"
+  },
+  "name": "Sara Ahmed",
+  "email": "sara@test.com",
+  "password": "$2b$10$fx4a6qWSvFr0WqexXylWfekwxGnn1BQjkpYJ5MhV7aMdzHjSouvjq",
+  "role": "customer",
+  "createdAt": {
+    "$date": "2026-05-16T15:48:27.192Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-16T15:48:27.192Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a0891cba5cde0cecf75f92b"
+  },
+  "name": "Usman Tariq",
+  "email": "usman@test.com",
+  "password": "$2b$10$oAvR4enhUoWUUazPpGbtXusK5LwKyRcFIGi7e2U5yScu4sevmLGY.",
+  "role": "customer",
+  "createdAt": {
+    "$date": "2026-05-16T15:48:27.250Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-16T15:48:27.250Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a0891cba5cde0cecf75f92c"
+  },
+  "name": "Fatima Noor",
+  "email": "fatima@test.com",
+  "password": "$2b$10$jOlvlJ2axEPYkjJh4i/wwevgTn7SOGpZXzIx/vRqHu1rpIq1jNmPe",
+  "role": "customer",
+  "createdAt": {
+    "$date": "2026-05-16T15:48:27.306Z"
+  },
+  "updatedAt": {
+    "$date": "2026-05-16T15:48:27.306Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a08a129c16095684eee031f"
+  },
+  "name": "Muhammad Azzam",
+  "email": "muhammadazzam1618@gmail.com",
+  "password": "$2b$10$ZQ2Hc2M9GdJclQxzQIs8v.jZxShAHtQTFq56xvwrlL6YN.c4YfyF2",
+  "role": "customer",
+  "createdAt": {
+    "$date": "2026-05-16T16:54:01.768Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-13T23:36:51.331Z"
+  },
+  "__v": 0,
+  "address": {
+    "street": "80 Chennab Block, Allama Iqbal Town, Lahore",
+    "city": "Lahore",
+    "state": "Punjab",
+    "zip": "54357",
+    "country": "Pakistan"
+  },
+  "phone": "03377158026"
+}]
