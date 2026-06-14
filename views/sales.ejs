@@ -1,82 +1,187 @@
-<h2 class="mb-4">Sales Dashboard</h2>
+<!DOCTYPE html>
+<html lang="en">
 
-<!-- STATS -->
-<div class="row mb-4">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sales Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <div class="col-md-6">
-    <div class="card p-3">
-      <h5>Total Orders</h5>
-      <h3 id="totalOrders"><%= totalOrders %></h3>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #f6f7fb, #eef2f7);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    .page-wrapper {
+      padding: 25px 10px;
+    }
+
+    h2, h4 {
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    /* STATS CARDS */
+    .stat-card {
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+      background: #fff;
+      transition: 0.2s ease;
+      height: 100%;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    }
+
+    .stat-title {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 5px;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: #111827;
+    }
+
+    /* TABLE CARD */
+    .table-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+      overflow: hidden;
+      margin-top: 15px;
+    }
+
+    .table-header {
+      padding: 14px 18px;
+      border-bottom: 1px solid #eef0f3;
+      font-weight: 600;
+    }
+
+    table {
+      margin: 0;
+    }
+
+    thead {
+      background: #f3f4f6;
+    }
+
+    tbody tr:hover {
+      background: #f9fafb;
+    }
+
+    td, th {
+      vertical-align: middle;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="page-wrapper container">
+
+    <!-- TITLE -->
+    <h2 class="mb-4">Sales Dashboard</h2>
+
+    <!-- STATS -->
+    <div class="row g-3 mb-4">
+
+      <div class="col-12 col-md-6">
+        <div class="stat-card p-3 p-md-4">
+
+          <div class="stat-title">Total Orders</div>
+          <div class="stat-value" id="totalOrders">
+            <%= totalOrders %>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <div class="stat-card p-3 p-md-4">
+
+          <div class="stat-title">Total Revenue</div>
+          <div class="stat-value" id="totalRevenue">
+            PKR <%= totalRevenue.toLocaleString() %>
+          </div>
+
+        </div>
+      </div>
+
     </div>
-  </div>
 
-  <div class="col-md-6">
-    <div class="card p-3">
-      <h5>Total Revenue</h5>
-      <h3 id="totalRevenue">
-        PKR <%= totalRevenue.toLocaleString() %>
-      </h3>
+    <!-- DAILY SALES -->
+    <h4 class="mb-3">Daily Sales</h4>
+
+    <div class="table-card">
+
+      <div class="table-header">
+        Revenue Breakdown
+      </div>
+
+      <div class="table-responsive">
+
+        <table class="table align-middle mb-0">
+
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Orders</th>
+              <th>Revenue</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% salesByDay.forEach(day => { %>
+              <tr>
+                <td><%= day._id %></td>
+                <td><%= day.orders %></td>
+                <td class="fw-semibold">
+                  PKR <%= day.revenue %>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+
+        </table>
+
+      </div>
+
     </div>
-  </div>
 
-</div>
+  </main>
 
-<!-- DAILY SALES TABLE -->
-<h4>Daily Sales</h4>
+  <!-- REAL-TIME POLLING -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-<table class="table table-bordered">
+  <script>
+    function updateSalesData() {
 
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Orders</th>
-      <th>Revenue</th>
-    </tr>
-  </thead>
+      $.getJSON('/api/v1/sales-data', function (data) {
 
-  <tbody>
-    <% salesByDay.forEach(day => { %>
-      <tr>
-        <td><%= day._id %></td>
-        <td><%= day.orders %></td>
-        <td>PKR <%= day.revenue %></td>
-      </tr>
-    <% }) %>
-  </tbody>
+        $('#totalOrders').text(data.totalOrders);
 
-</table>
+        $('#totalRevenue').text(
+          'PKR ' + data.totalRevenue.toLocaleString()
+        );
 
-<!-- =========================
-     REAL-TIME POLLING SCRIPT
-========================= -->
+      });
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    }
 
-<script>
+    $(document).ready(function () {
+      updateSalesData();
+      setInterval(updateSalesData, 10000);
+    });
+  </script>
 
-function updateSalesData() {
+</body>
 
-  $.getJSON('/api/v1/sales-data', function(data) {
-
-    // update stats
-    $('#totalOrders').text(data.totalOrders);
-
-    $('#totalRevenue').text(
-      'PKR ' + data.totalRevenue.toLocaleString()
-    );
-
-  });
-
-}
-
-$(document).ready(function() {
-
-  // initial call
-  updateSalesData();
-
-  // update every 10 seconds
-  setInterval(updateSalesData, 10000);
-
-});
-
-</script>
+</html>
